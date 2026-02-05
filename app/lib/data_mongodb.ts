@@ -75,8 +75,14 @@ export async function closeDatabaseConnection() {
 
 export async function fetchRevenue() {
   try {
+
+    console.log('Fetching revenue data...');
+    await new Promise((resolve) => setTimeout(resolve, 3000));
+
+
     const { db } = await connectToDatabase();
     const revenueCollection = db.collection('revenue');
+
 
     const data = await revenueCollection
       .find({})
@@ -88,6 +94,9 @@ export async function fetchRevenue() {
       .toArray() as { month: string; revenue: number }[];
     
     console.log('Data fetch completed: ' + JSON.stringify(data));
+
+    console.log('Data fetch completed after 3 seconds.');
+      
     return data;
   } catch (error) {
     console.error('Database Error:', error);
@@ -98,6 +107,11 @@ export async function fetchRevenue() {
 
 export async function fetchLatestInvoices(): Promise<LatestInvoice[]> {
   try {
+
+    console.log('Fetching latestInvoices data...');
+    await new Promise((resolve) => setTimeout(resolve, 5000));
+
+
     const { db } = await connectToDatabase();
     
     const result = await db.collection('invoices').aggregate([
@@ -127,6 +141,9 @@ export async function fetchLatestInvoices(): Promise<LatestInvoice[]> {
       }
     ]).toArray() as LatestInvoiceRaw[];
     
+
+    console.log('Data fetch completed after 5 seconds.');
+
     return result.map((invoice: LatestInvoiceRaw) => ({
       ...invoice,
       amount: formatCurrency(invoice.amount),
@@ -141,6 +158,10 @@ export async function fetchLatestInvoices(): Promise<LatestInvoice[]> {
 
 export async function fetchCardData() {
   try {
+
+    console.log('Fetching card data...');
+    await new Promise((resolve) => setTimeout(resolve, 6000));
+
     const { db } = await connectToDatabase();
     
     // 并行执行 3 个独立的查询
@@ -195,6 +216,8 @@ export async function fetchCardData() {
       paidCount: 0,
       pendingCount: 0
     };
+
+    console.log('Data fetch completed after 5 seconds.');
 
     return {
       numberOfCustomers: customerCountResult,
